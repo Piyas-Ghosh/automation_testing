@@ -11,9 +11,6 @@ export default function Dashboard() {
         {/* Hero */}
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold text-black mb-4">TestFlow Analytics</h1>
-          <p className="text-xl text-purple-900 mb-8">
-            Monitor your application performance with real-time insights
-          </p>
         </div>
 
         {/* Charts */}
