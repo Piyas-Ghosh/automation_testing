@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const Header = () => {
   const navigate = useNavigate();
   return (
-    <header className="bg-blue-950 shadow-md p-5 flex items-center sticky top-0 z-50">
+    <header className="bg-[#091746] shadow-md p-5 flex items-center sticky top-0 z-50">
       <h1
         onClick={() => navigate("/")}
         className="text-xl text-white font-semibold flex-1 cursor-pointer"
