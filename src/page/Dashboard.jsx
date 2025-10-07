@@ -9,9 +9,6 @@ export default function Dashboard() {
     <div className=" text-black min-h-screen">
       <div className="w-full px-4 md:px-12 py-12">
         {/* Hero */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-black mb-4">TestFlow Analytics</h1>
-        </div>
 
         {/* Charts */}
         <div className="grid md:grid-cols-3 gap-8 mb-16">

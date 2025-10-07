@@ -12,13 +12,16 @@ export default function Auth() {
         if (token) {
             localStorage.setItem("authToken", token);
             console.log("Auth Token Saved:", token);
-
-            // redirect after saving
+            
             navigate("/");
         } else {
             console.error("No token found in URL!");
         }
     }, [location, navigate]);
 
-    return <p>Processing login...</p>;
+    return (
+        <p className="fixed inset-0 flex flex-col items-center justify-center bg-white/70 backdrop-blur-sm z-1000">
+            Loading...
+        </p>
+    );
 }
