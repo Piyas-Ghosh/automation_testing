@@ -24,7 +24,7 @@ export default function Auth() {
     return (
         <div className="fixed inset-0 flex flex-col items-center justify-center bg-white/70 backdrop-blur-sm z-50">
             <Lottie animationData={LoaderAnimaction} loop={true} className="w-[500px] h-[80px]" />
-            <p className="text-2xl font-bold">Loading...</p>
+            <p className="text-2xl font-bold">Loading....</p>
         </div>
     );
 }
