@@ -1,6 +1,7 @@
 import LineChart from "../components/chart/LineChart";
 import GaugeChart from "../components/chart/GaugeChart";
 import StatsCard from "../components/StatsCard";
+import ForceDirectedChart from "../components/chart/Force_Directed";
 import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
@@ -27,6 +28,14 @@ export default function Dashboard() {
             </h3>
             <GaugeChart />
           </div>
+
+          <div className=" md:col-span-3  backdrop-blur-lg rounded-2xl p-6 border border-gray-300 shadow-lg flex flex-col">
+            <h3 className="text-2xl font-semibold  mb-4">
+              Application Health
+            </h3>
+            <ForceDirectedChart />
+          </div>
+
         </div>
 
         {/* Stats */}
