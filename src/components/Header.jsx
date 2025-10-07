@@ -11,8 +11,8 @@ const Header = () => {
       >Dashboard
       </h1>
       <div className="flex gap-2">
-        <button className="bg-orange-700 text-white px-3 py-1 rounded">Logout</button>
-        <button className="bg-green-700 text-white px-3 py-1 rounded" onClick={() => navigate("/crud")}>Add+</button>
+        <button className="bg-orange-700 text-white px-3 py-1 rounded cursor-pointer">Logout</button>
+        <button className="bg-green-700 text-white px-3 py-1 rounded cursor-pointer" onClick={() => navigate("/crud")}>Add+</button>
       </div>
     </header>
   );
