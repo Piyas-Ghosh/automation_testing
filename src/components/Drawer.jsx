@@ -1,4 +1,3 @@
-import React from "react";
 import { X } from 'lucide-react';
 
 const Drawer = ({ isOpen, onClose, children }) => {
@@ -14,8 +13,8 @@ const Drawer = ({ isOpen, onClose, children }) => {
       {/* Drawer */}
       <div
         className={`fixed top-0 right-0 h-full w-[60%] bg-white shadow-xl transform transition-transform duration-300 ${isOpen
-            ? "translate-x-0 visible pointer-events-auto"
-            : "translate-x-full invisible pointer-events-none"
+          ? "translate-x-0 visible pointer-events-auto"
+          : "translate-x-full invisible pointer-events-none"
           } z-[9999]`}
       >
         {/* Close button */}
