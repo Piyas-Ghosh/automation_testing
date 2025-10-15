@@ -83,7 +83,7 @@ export default function GaugeChartStep({ value = 50, bandsData, ranges = [] }) {
 
     let bullet = axisDataItem.set(
       "bullet",
-      am5xy.AxisBullet.new(root, { sprite: clockHand })
+      am5xy.AxisBullet.new(root, { sprite: clockHand }) 
     );
     xAxis.createAxisRange(axisDataItem);
     axisDataItem.set("value", value);
@@ -121,7 +121,7 @@ export default function GaugeChartStep({ value = 50, bandsData, ranges = [] }) {
         fontStyle: "bold",
         fill: am5.color(0x000000),
       });
-      bandLabel.set("forceHidden", false);  // Override template to show this label
+      bandLabel.set("forceHidden", false);
       bandLabel.set("visible", true);
     });
 
@@ -131,6 +131,6 @@ export default function GaugeChartStep({ value = 50, bandsData, ranges = [] }) {
   }, [value, bandsData, ranges]);
 
   return (
-    <div ref={chartRef} className="w-[370px] h-[200px] md:h-[400px]" />
+    <div ref={chartRef} className="w-[385px] h-[200px] md:h-[400px]" />
   );
 }
