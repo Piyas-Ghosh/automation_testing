@@ -1,14 +1,16 @@
-import { useLayoutEffect } from "react";
+import React, { useEffect, useRef } from 'react';
 import * as am5 from "@amcharts/amcharts5";
 import * as am5xy from "@amcharts/amcharts5/xy";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 
-export default function LineChart() {
-    useLayoutEffect(() => {
-        // Create root
-        let root = am5.Root.new("chartdiv");
+const ChartComponent = () => {
+    const chartDivRef = useRef(null);
+
+    useEffect(() => {
+        let root = am5.Root.new(chartDivRef.current);
         root._logo.dispose();
-        // Set theme
+
+        // Set themes
         root.setThemes([am5themes_Animated.new(root)]);
 
         // Create chart
@@ -19,36 +21,37 @@ export default function LineChart() {
                 panY: true,
                 wheelX: "panX",
                 wheelY: "zoomX",
-                pinchZoomX: true,
+                pinchZoomX: true
             })
         );
+
         chart.get("colors").set("step", 3);
-        // Create X Axis
+
+        // Create axes
         let xAxis = chart.xAxes.push(
             am5xy.DateAxis.new(root, {
                 maxDeviation: 0.1,
                 groupData: false,
-                baseInterval: { timeUnit: "day", count: 1 },
+                baseInterval: {
+                    timeUnit: "day",
+                    count: 1
+                },
                 renderer: am5xy.AxisRendererX.new(root, {
                     minGridDistance: 80,
-                    minorGridEnabled: true,
+                    minorGridEnabled: true
                 }),
-                tooltip: am5.Tooltip.new(root, {}),
+                tooltip: am5.Tooltip.new(root, {})
             })
         );
 
-        // X-axis labels white
-        xAxis.get("renderer").labels.template.setAll({
-            fill: am5.color(0xffffff), // white text
-        });
-
-        // Function to create Y Axis + Series
         function createAxisAndSeries(startValue, opposite) {
-            let yRenderer = am5xy.AxisRendererY.new(root, { opposite });
+            let yRenderer = am5xy.AxisRendererY.new(root, {
+                opposite: opposite
+            });
             let yAxis = chart.yAxes.push(
                 am5xy.ValueAxis.new(root, {
                     maxDeviation: 1,
-                    renderer: yRenderer,
+                    renderer: yRenderer
                 })
             );
 
@@ -56,16 +59,17 @@ export default function LineChart() {
                 yAxis.set("syncWithAxis", chart.yAxes.getIndex(0));
             }
 
+            // Add series
             let series = chart.series.push(
                 am5xy.LineSeries.new(root, {
-                    xAxis,
-                    yAxis,
+                    xAxis: xAxis,
+                    yAxis: yAxis,
                     valueYField: "value",
                     valueXField: "date",
                     tooltip: am5.Tooltip.new(root, {
                         pointerOrientation: "horizontal",
-                        labelText: "{valueY}",
-                    }),
+                        labelText: "{valueY}"
+                    })
                 })
             );
 
@@ -76,69 +80,64 @@ export default function LineChart() {
             yRenderer.setAll({
                 stroke: series.get("fill"),
                 strokeOpacity: 1,
-                opacity: 1,
-
+                opacity: 1
             });
 
-            // Data Processor
+            // Set up data processor to parse string dates
             series.data.processor = am5.DataProcessor.new(root, {
                 dateFormat: "yyyy-MM-dd",
-                dateFields: ["date"],
+                dateFields: ["date"]
             });
 
             series.data.setAll(generateChartData(startValue));
         }
 
-        // Add Cursor
-        let cursor = chart.set(
-            "cursor",
-            am5xy.XYCursor.new(root, {
-                xAxis,
-                behavior: "none",
-            })
-        );
+        // Add cursor
+        let cursor = chart.set("cursor", am5xy.XYCursor.new(root, {
+            xAxis: xAxis,
+            behavior: "none"
+        }));
         cursor.lineY.set("visible", false);
 
-        // Add Scrollbar
-        chart.set(
-            "scrollbarX",
-            am5.Scrollbar.new(root, {
-                orientation: "horizontal",
-            })
-        );
+        // Add scrollbar
+        chart.set("scrollbarX", am5.Scrollbar.new(root, {
+            orientation: "horizontal"
+        }));
 
-        // Create multiple series
+        // Create only two series
         createAxisAndSeries(100, false);
         createAxisAndSeries(1000, true);
-        createAxisAndSeries(8000, true);
 
-        // Animate chart
         chart.appear(1000, 100);
-
-        // Generate Data
-        function generateChartData(value) {
-            let data = [];
-            let firstDate = new Date();
-            firstDate.setDate(firstDate.getDate() - 100);
-            firstDate.setHours(0, 0, 0, 0);
-
-            for (let i = 0; i < 100; i++) {
-                let newDate = new Date(firstDate);
-                newDate.setDate(newDate.getDate() + i);
-
-                value += Math.round(
-                    ((Math.random() < 0.5 ? 1 : -1) * Math.random() * value) / 20
-                );
-
-                data.push({ date: newDate, value });
-            }
-            return data;
-        }
-
         return () => {
             root.dispose();
         };
     }, []);
 
-    return <div id="chartdiv" className="w-full h-[500px]" />;
-}
+    // Generates random data
+    function generateChartData(value) {
+        let data = [];
+        let firstDate = new Date();
+        firstDate.setDate(firstDate.getDate() - 100);
+        firstDate.setHours(0, 0, 0, 0);
+
+        for (let i = 0; i < 100; i++) {
+            let newDate = new Date(firstDate);
+            newDate.setDate(newDate.getDate() + i);
+
+            value += Math.round(
+                ((Math.random() < 0.5 ? 1 : -1) * Math.random() * value) / 20
+            );
+
+            data.push({
+                date: newDate,
+                value: value
+            });
+        }
+        return data;
+    }
+
+    return <div id="chartdiv" ref={chartDivRef} style={{ width: '100%', height: '500px' }} />;
+};
+
+export default ChartComponent;

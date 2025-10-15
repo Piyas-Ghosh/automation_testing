@@ -22,6 +22,8 @@ export default function TestFlow() {
     { title: "High Performing", color: "#0f9747", lowScore: 80, highScore: 100 },
   ];
 
+  const ranges = [bandsData[0].lowScore, ...bandsData.map(band => band.highScore)];
+
   const handleStepClick = () => {
     const responseFromAPI = {
       name: "John Doe",
@@ -77,12 +79,13 @@ export default function TestFlow() {
           <h2 className="text-3xl font-bold text-black mb-4">Test Flow Visualization</h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-x-15 gap-y-8 mt-8 animate-fade-in justify-center place-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-15 gap-y-8 mt-8 animate-fade-in justify-center place-items-center">
           <Step
             header="O2CGoodsBaseTest"
             lastDate="2025-09-01"
             value={50}
             bandsData={bandsData}
+            ranges={ranges}
             onClick={() => handleRunTestFlow("O2CGoodsBaseTest")}
           />
           <Step
@@ -90,38 +93,39 @@ export default function TestFlow() {
             lastDate="2025-09-05"
             value={80}
             bandsData={bandsData}
+            ranges={ranges}
             onClick={() => handleRunTestFlow("O2CGoodsInvoiceFlowTest")}
           />
-          <Step header="Goods Direct Invoice Collection" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="O2C Goods Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="O2C Service Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="Proforma Goods Invoice Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="Proforma O2C Goods Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="Proforma O2C Service Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="Service Direct Invoice Collection" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="Trading O2C Procurement Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="Create Customer With GST Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="Create Customer With Non-GST Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="Create Vendor With GST Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="Create Vendor With Non-GST Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="Create Assets Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="Create FG For Manufacturing Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="Create FG For Trading Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="Create RM Item Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="Create Service Purchase Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="Create Service Sales Project Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="Create Service Sales Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="Create SFG Item Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="Create FG BOM With RM And SFG Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="Create FG BOM With RM SFG And FG Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="Create SFG BOM With RM Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="PO To Payment Asset Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="PO To Payment Material Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="PO To Payment Service Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="PR To Payment Asset Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="PR To Payment Material Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="PR To Payment Service Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
-          <Step header="End To End O2C P2P Trading Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} onClick={handleStepClick} />
+          <Step header="Goods Direct Invoice Collection" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="O2C Goods Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="O2C Service Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="Proforma Goods Invoice Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="Proforma O2C Goods Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="Proforma O2C Service Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="Service Direct Invoice Collection" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="Trading O2C Procurement Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="Create Customer With GST Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="Create Customer With Non-GST Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="Create Vendor With GST Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="Create Vendor With Non-GST Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="Create Assets Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="Create FG For Manufacturing Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="Create FG For Trading Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="Create RM Item Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="Create Service Purchase Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="Create Service Sales Project Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="Create Service Sales Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="Create SFG Item Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="Create FG BOM With RM And SFG Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="Create FG BOM With RM SFG And FG Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="Create SFG BOM With RM Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="PO To Payment Asset Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="PO To Payment Material Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="PO To Payment Service Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="PR To Payment Asset Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="PR To Payment Material Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="PR To Payment Service Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
+          <Step header="End To End O2C P2P Trading Flow Test" lastDate="2025-09-07" value={30} bandsData={bandsData} ranges={ranges} onClick={handleStepClick} />
         </div>
       </div>
 
@@ -194,22 +198,22 @@ export default function TestFlow() {
   );
 }
 
-function Step({ header, lastDate, value, bandsData, onClick }) {
+function Step({ header, lastDate, value, bandsData, ranges, onClick }) {
   return (
     <div
-      className="rounded-xl p-6 border text-black border-gray-300 shadow-xl transform transition-all duration-500 hover:scale-102 w-[600px] h-[400px] cursor-pointer"
+      className="rounded-xl p-6 border text-black border-gray-300 shadow-xl transform transition-all duration-500 hover:scale-102 w-[420px] h-[300px] cursor-pointer"
       onClick={() => onClick({ header, lastDate, value })}
     >
-      <h3 className="text-xl font-bold mb-2 w-82">{header}</h3>
+      <h3 className="text-md font-bold mb-2 w-90">{header}</h3>
       <div className="flex justify-between items-center mt-1 h-full">
         <div className="">
           <div className="font-semibold w-[126px]">
-            <span className="text-sm">Last Testing Date: </span>
-            <span className="text-blue-400">{lastDate}</span>
+            <span className="text-xs font-bold">Last Testing Date: </span>
+            <span className="text-xs text-blue-400" >{lastDate}</span>
           </div>
         </div>
-        <div className="w-[350px] mr-[235px]">
-          <GaugeChartStep value={value} bandsData={bandsData} />
+        <div className="w-auto -ml-18">
+          <GaugeChartStep value={value} bandsData={bandsData} ranges={ranges} />
         </div>
       </div>
     </div>

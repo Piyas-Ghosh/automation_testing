@@ -4,7 +4,7 @@ import * as am5radar from "@amcharts/amcharts5/radar";
 import * as am5xy from "@amcharts/amcharts5/xy";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 
-export default function GaugeChartStep({ value = 50, bandsData }) {
+export default function GaugeChartStep({ value = 50, bandsData, ranges = [] }) {
   const chartRef = useRef(null);
 
   useLayoutEffect(() => {
@@ -34,13 +34,42 @@ export default function GaugeChartStep({ value = 50, bandsData }) {
       })
     );
 
+    // Hide default axis labels/ticks to show only custom ranges
+    axisRenderer.labels.template.setAll({ forceHidden: true });
+
+    // Custom range labels using axis ranges (replaces defaults like 0, 50, 100)
+    if (ranges.length > 0) {
+      ranges.forEach((val) => {
+        let axisRange = xAxis.createAxisRange(xAxis.makeDataItem({}));
+        axisRange.setAll({
+          value: val,
+          endValue: val,  // Single point for tick label
+        });
+        axisRange.get("axisFill").setAll({
+          visible: false,  // No fill for just a label
+        });
+        let rangeLabel = axisRange.get("label");
+        rangeLabel.setAll({
+          text: val.toString(),
+          inside: false,  // Place outside the arc
+          radius: 5,     // Adjust offset from axis
+          fontSize: "0.6em",
+          fill: am5.color(0x000000),  // Black text
+          fontWeight: "500",
+        });
+
+        rangeLabel.set("forceHidden", false);  // Override template to show this label
+        rangeLabel.set("visible", true);       // Ensure visibility
+      });
+    }
+
     // Clock Hand with bigger base
     let axisDataItem = xAxis.makeDataItem({});
     let clockHand = am5radar.ClockHand.new(root, {
-      radius: am5.percent(100),
-      bottomWidth: 15,          // base thickness
+      radius: am5.percent(95),
+      bottomWidth: 10,          // base thickness
       topWidth: 2,              // sharp tip
-      pinRadius: 15,            // circular pin at base
+      pinRadius: 10,            // circular pin at base
       fill: am5.color(0xffffff),   // needle color
       stroke: am5.color(0x000000), // outline
     });
@@ -66,7 +95,7 @@ export default function GaugeChartStep({ value = 50, bandsData }) {
         centerX: am5.percent(50),
         textAlign: "center",
         centerY: am5.percent(50),
-        fontSize: "1.2em",
+        fontSize: "0.9em",
         text: `${value}`,
       })
     );
@@ -81,23 +110,27 @@ export default function GaugeChartStep({ value = 50, bandsData }) {
       axisRange.get("axisFill").setAll({
         visible: true,
         fill: am5.color(data.color),
-        fillOpacity: 0.8,
+        fillOpacity: 0.9,
       });
-      axisRange.get("label").setAll({
+      let bandLabel = axisRange.get("label");
+      bandLabel.setAll({
         text: data.title,
         inside: true,
         radius: 15,
-        fontSize: "0.6em",
-        fill: am5.color(0xffffff),
+        fontSize: "0.4em",
+        fontStyle: "bold",
+        fill: am5.color(0x000000),
       });
+      bandLabel.set("forceHidden", false);  // Override template to show this label
+      bandLabel.set("visible", true);
     });
 
     chart.appear(1000, 100);
 
     return () => root.dispose();
-  }, [value, bandsData]);
+  }, [value, bandsData, ranges]);
 
   return (
-    <div ref={chartRef} className="w-[245%] h-[300px] md:h-[355px]" />
+    <div ref={chartRef} className="w-[370px] h-[200px] md:h-[400px]" />
   );
 }
