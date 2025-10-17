@@ -56,7 +56,7 @@ export default function Crud() {
         setLoading(true);
         setMessage('');
         try {
-            const res = await api.post('/api/bugs/create', createFormData);
+            const res = await api.post('/bugs/create', createFormData);
             setMessage(res.data.message);
             setCreateFormData({
                 testCaseId: '', module: '', section: '',
@@ -88,7 +88,7 @@ export default function Crud() {
             Object.entries(updateFormData).filter(([, value]) => value !== '')
         );
         try {
-            const res = await api.put('/api/bugs/update', filteredUpdateData);
+            const res = await api.put('/bugs/update', filteredUpdateData);
             setMessage(res.data.message || `Bug report ${updateFormData.testCaseId} updated successfully!`);
             setUpdateFormData({
                 testCaseId: '', module: '', section: '',

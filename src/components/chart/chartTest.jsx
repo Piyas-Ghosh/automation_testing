@@ -26,7 +26,7 @@ export default function GaugeChartStep({ value = 50, bandsData, ranges = [] }) {
 
     let xAxis = chart.xAxes.push(
       am5xy.ValueAxis.new(root, {
-        min: -40,
+        min: 0,
         max: 100,
         strictMinMax: true,
         renderer: axisRenderer,
@@ -53,7 +53,7 @@ export default function GaugeChartStep({ value = 50, bandsData, ranges = [] }) {
           text: val.toString(),
           inside: false,  // Place outside the arc
           radius: 5,     // Adjust offset from axis
-          fontSize: "0.6em",
+          fontSize: "0.9em",
           fill: am5.color(0x000000),  // Black text
           fontWeight: "500",
         });
@@ -69,7 +69,7 @@ export default function GaugeChartStep({ value = 50, bandsData, ranges = [] }) {
       radius: am5.percent(95),
       bottomWidth: 10,          // base thickness
       topWidth: 2,              // sharp tip
-      pinRadius: 10,            // circular pin at base
+      pinRadius: 15,            // circular pin at base
       fill: am5.color(0xffffff),   // needle color
       stroke: am5.color(0x000000), // outline
     });
@@ -83,7 +83,7 @@ export default function GaugeChartStep({ value = 50, bandsData, ranges = [] }) {
 
     let bullet = axisDataItem.set(
       "bullet",
-      am5xy.AxisBullet.new(root, { sprite: clockHand }) 
+      am5xy.AxisBullet.new(root, { sprite: clockHand })
     );
     xAxis.createAxisRange(axisDataItem);
     axisDataItem.set("value", value);
@@ -117,7 +117,7 @@ export default function GaugeChartStep({ value = 50, bandsData, ranges = [] }) {
         text: data.title,
         inside: true,
         radius: 15,
-        fontSize: "0.4em",
+        fontSize: "0.9em",
         fontStyle: "bold",
         fill: am5.color(0x000000),
       });
