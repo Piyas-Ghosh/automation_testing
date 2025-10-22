@@ -3,7 +3,7 @@ import GaugeChartStep from "./chart/chartTest";
 import Drawer from "../components/Drawer";
 import api from "../api/axios";
 import toast from "react-hot-toast";
-import loaderAnimation from "../assets/loading.json";
+import loaderAnimation from "../assets/Live chatbot.json";
 import Lottie from "lottie-react";
 import { useTransition } from "react";
 
@@ -33,7 +33,7 @@ export default function TestFlow() {
     { header: "Trading O2C Procurement Flow Test", lastDate: "2025-09-07", value: 0 },
     { header: "Create Customer With Gst Test", lastDate: "2025-09-07", value: 0 },
     { header: "Create Customer With Non-GST Test", lastDate: "2025-09-07", value: 0 },
-    { header: "Create Vendor With GST Test", lastDate: "2025-09-07", value: 0 },
+    { header: "Create Vendor With Gst Test", lastDate: "2025-09-07", value: 0 },
     { header: "Create Vendor With Non-GST Test", lastDate: "2025-09-07", value: 0 },
     { header: "Create Assets Test", lastDate: "2025-09-07", value: 30 },
     { header: "Create FG For Manufacturing Test", lastDate: "2025-09-07", value: 0 },
@@ -69,7 +69,7 @@ export default function TestFlow() {
             ? {
               ...step,
               value: Math.round(passRate),
-              lastDate: testingDate || step.lastDate
+              lastDate: testingDate || step.lastDate,
             }
             : step
         )
@@ -79,7 +79,6 @@ export default function TestFlow() {
     }
   }, []);
 
-  // Function to fetch data for all steps sequentially
   const fetchAllStepData = useCallback(async () => {
     const initialData = initializeStepData();
     setStepData(initialData);
@@ -88,7 +87,6 @@ export default function TestFlow() {
       await handleGrap(step.header);
       await new Promise(resolve => setTimeout(resolve, 100));
     }
-
   }, [handleGrap]);
 
   useEffect(() => {
@@ -105,18 +103,21 @@ export default function TestFlow() {
 
     const payload = { testClassName };
 
-    try {
-      const response = await api.post('/automation/submit-test-execution', payload);
-      console.log("Submit response:", response.data);
-      toast.success("Form submitted successfully!");
-      setIsDrawerOpen(false);
-      setSelectedTestClassName("");
-      setInitialDrawerData({});
-    } catch (error) {
-      console.error('Error submitting data:', error);
-      toast.error("Failed to submit form. Please try again.");
-    }
+    startTransition(async () => {
+      try {
+        const response = await api.post('/automation/submit-test-execution', payload);
+        console.log("Submit response:", response.data);
+        toast.success("Form submitted successfully!");
+        setIsDrawerOpen(false);
+        setSelectedTestClassName("");
+        setInitialDrawerData({});
+      } catch (error) {
+        console.error('Error submitting data:', error);
+        toast.error("Failed to submit form. Please try again.");
+      }
+    });
   };
+
 
   const handleUpdate = useCallback(async (testClassName, overrides) => {
     if (!testClassName) {
@@ -124,23 +125,40 @@ export default function TestFlow() {
       return;
     }
 
-    const payload = { testClassName, ...overrides };
+    // Normalize overrides keys to match dbConfig (e.g., customer.gstnumber -> customer.gstNumber)
+    const normalizedOverrides = Object.fromEntries(
+      Object.entries(overrides).map(([key, value]) => [
+        key.replace("gstnumber", "gstNumber"),
+        value,
+      ])
+    );
+
+    const payload = { testClassName, ...normalizedOverrides };
 
     startTransition(async () => {
       try {
-        const response = await api.post('automation/load-data', payload);
-
+        const response = await api.post("automation/load-data", payload);
         const dbConfig = response.data.dbConfig;
         const overridesResponse = response.data.overrides || {};
-        const mergedData = { ...dbConfig, ...overridesResponse };
+
+        // Normalize overridesResponse keys ..............
+        const normalizedOverridesResponse = Object.fromEntries(
+          Object.entries(overridesResponse).map(([key, value]) => [
+            key.replace("gstnumber", "gstNumber"),
+            value,
+          ])
+        );
+
+        // Merge dbConfig and normalized overrides, ensuring overrides take precedence
+        const mergedData = { ...dbConfig, ...normalizedOverridesResponse };
 
         const formattedData = Object.fromEntries(
           Object.entries(mergedData).map(([key, value]) => {
-            if (key.toLowerCase().includes("date") && value && typeof value === 'string') {
+            if (key.toLowerCase().includes("date") && value && typeof value === "string") {
               const parts = value.split("-");
               if (parts.length === 3 && parts[0].length === 2 && parts[1].length === 2 && parts[2].length === 4) {
                 const [day, month, year] = parts;
-                return [key, `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`];
+                return [key, `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`];
               }
             }
             return [key, value];
@@ -150,7 +168,7 @@ export default function TestFlow() {
         setInitialDrawerData(formattedData);
         toast.success("Updated successfully!");
       } catch (error) {
-        console.error('Error updating data:', error);
+        console.error("Error updating data:", error);
         toast.error("Failed to update data. Please try again.");
       }
     });
@@ -180,6 +198,13 @@ export default function TestFlow() {
             return [key, value];
           })
         );
+
+        // If the step is "Create Customer With GST Test", ensure GST field is present
+        if (stepData.header === "Create Customer With GST Test") {
+          formattedData['customer.gstNumber'] = formattedData['customer.gstNumber'] || "";
+        } else if (stepData.header === "Create Vendor With GST Test") {
+          formattedData['gstNo'] = formattedData['gstNo'] || "";
+        }
 
         setInitialDrawerData(formattedData);
       } catch (error) {
@@ -231,15 +256,14 @@ export default function TestFlow() {
   );
 }
 
-// DrawerContent component remains the same...
 function DrawerContent({ initialData, testClassName, onSubmit, onUpdate, isPending, loaderAnimation }) {
   const [apiData, setApiData] = useState(initialData);
   const [originalApiData, setOriginalApiData] = useState(initialData);
 
-  if (JSON.stringify(initialData) !== JSON.stringify(originalApiData)) {
+  useEffect(() => {
     setApiData(initialData);
     setOriginalApiData(initialData);
-  }
+  }, [initialData]);
 
   const handleLocalSubmit = (e) => {
     e.preventDefault();
@@ -248,7 +272,7 @@ function DrawerContent({ initialData, testClassName, onSubmit, onUpdate, isPendi
 
   const handleLocalUpdate = () => {
     const overrides = {};
-    Object.keys(apiData).forEach(key => {
+    Object.keys(apiData).forEach((key) => {
       if (JSON.stringify(apiData[key]) !== JSON.stringify(originalApiData[key])) {
         overrides[key] = apiData[key];
       }
@@ -272,9 +296,11 @@ function DrawerContent({ initialData, testClassName, onSubmit, onUpdate, isPendi
     return <p className="p-4">No data available</p>;
   }
 
+  const isGSTTest = testClassName === "CreateCustomerWithGstTest" || testClassName === "CreateVendorWithGstTest";
+
   return (
     <div className="max-h-[80vh] overflow-y-auto p-4">
-      <h2 className="font-bold text-xl mb-6">Dynamic User Details</h2>
+      <h2 className="font-bold text-xl mb-6">{testClassName} Form</h2>
 
       <form className="grid grid-cols-1 sm:grid-cols-2 gap-4" onSubmit={handleLocalSubmit}>
         {Object.entries(apiData).map(([key, value]) => {
@@ -285,6 +311,7 @@ function DrawerContent({ initialData, testClassName, onSubmit, onUpdate, isPendi
           else if (lowerKey.includes("email") || lowerKey.includes("gmail")) inputType = "email";
           else if (lowerKey.includes("phone") || lowerKey.includes("mobile")) inputType = "tel";
           else if (lowerKey.includes("date")) inputType = "date";
+          else if (lowerKey.includes("gst")) inputType = "text"; // Ensure GST number is text
 
           return (
             <div key={key} className="flex flex-col">
@@ -293,11 +320,11 @@ function DrawerContent({ initialData, testClassName, onSubmit, onUpdate, isPendi
               </label>
               <input
                 type={inputType}
-                value={value || ''}
+                value={value || ""}
                 onChange={(e) => {
                   let newValue = e.target.value;
 
-                  if (lowerKey.includes("pan") || lowerKey.includes("code")) {
+                  if (lowerKey.includes("pan") || lowerKey.includes("gst") || lowerKey.includes("code")) {
                     newValue = newValue.toUpperCase();
                   }
 
@@ -307,9 +334,15 @@ function DrawerContent({ initialData, testClassName, onSubmit, onUpdate, isPendi
 
                   handleInputChange(key, newValue);
                 }}
-                className={`w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${lowerKey.includes("pan") || lowerKey.includes("code") ? "uppercase" : ""}`}
+                className={`w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${lowerKey.includes("pan") || lowerKey.includes("gst") || lowerKey.includes("code") ? "uppercase" : ""
+                  }`}
                 placeholder={`Enter ${key.replace(/_/g, " ")}`}
               />
+              {isGSTTest && lowerKey.includes("gst") && (
+                <p className="mt-1 text-sm text-red-600">
+                  Please use your own GST number, update, and then submit.
+                </p>
+              )}
             </div>
           );
         })}
@@ -317,14 +350,14 @@ function DrawerContent({ initialData, testClassName, onSubmit, onUpdate, isPendi
         <div className="sm:col-span-2 pt-2 flex justify-between gap-2">
           <button
             type="submit"
-            className="w-[100px] bg-cyan-600 text-white py-2 rounded-lg hover:bg-black transition"
+            className="w-[100px] bg-cyan-600 text-white py-2 rounded-lg hover:bg-black transition cursor-pointer"
           >
             Submit
           </button>
           <button
             type="button"
             onClick={handleLocalUpdate}
-            className="w-[100px] bg-amber-500 text-white py-2 rounded-lg hover:bg-black transition"
+            className="w-[100px] bg-amber-500 text-white py-2 rounded-lg hover:bg-black transition cursor-pointer"
           >
             Update
           </button>

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import LoaderAnimaction from "../assets/loading.json";
+import LoaderAnimaction from "../assets/Live chatbot.json";
 import Lottie from "lottie-react";
 
 export default function Auth() {
@@ -23,8 +23,7 @@ export default function Auth() {
 
     return (
         <div className="fixed inset-0 flex flex-col items-center justify-center bg-white/70 backdrop-blur-sm z-50">
-            <Lottie animationData={LoaderAnimaction} loop={true} className="w-[500px] h-[80px]" />
-            <p className="text-2xl font-bold">Loading....</p>
+            <Lottie animationData={LoaderAnimaction} loop={true} className="w-[700px] h-[150px]" />
         </div>
     );
 }

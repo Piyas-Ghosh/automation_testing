@@ -11,7 +11,7 @@ const Header = () => {
       >
         Dashboard
       </h1>
-      <div className="flex gap-2">
+      {/* <div className="flex gap-2">
         <button className="bg-orange-700 text-white px-3 py-1 rounded cursor-pointer">
           Logout
         </button>
@@ -21,7 +21,7 @@ const Header = () => {
         >
           Add+
         </button>
-      </div>
+      </div> */}
     </header>
   );
 };

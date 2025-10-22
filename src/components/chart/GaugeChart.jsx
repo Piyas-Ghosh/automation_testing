@@ -8,29 +8,25 @@ export default function GaugeChart({ value = 50, bandsData, ranges = [] }) {
   const chartRef = useRef(null);
 
   useLayoutEffect(() => {
-    // Create root
     let root = am5.Root.new(chartRef.current);
     root._logo.dispose(); // remove amcharts logo
-    root.autoResize = true;
-
     root.setThemes([am5themes_Animated.new(root)]);
 
-    // Create Radar Chart
     let chart = root.container.children.push(
-      am5radar.RadarChart.new(root, { 
-        startAngle: 160, 
-        endAngle: 380 
+      am5radar.RadarChart.new(root, {
+        startAngle: 160,
+        endAngle: 380,
       })
     );
 
     // Axis
-    let axisRenderer = am5radar.AxisRendererCircular.new(root, { 
-      innerRadius: -40 
+    let axisRenderer = am5radar.AxisRendererCircular.new(root, {
+      innerRadius: -40,
     });
-    
+
     let xAxis = chart.xAxes.push(
       am5xy.ValueAxis.new(root, {
-        min: -40,
+        min: 0,
         max: 100,
         strictMinMax: true,
         renderer: axisRenderer,
@@ -38,8 +34,8 @@ export default function GaugeChart({ value = 50, bandsData, ranges = [] }) {
       })
     );
 
-    // Hide the axis labels numbers.........>>>>>
-    axisRenderer.labels.template.setAll({ forceHidden: false });
+    // Hide default axis labels/ticks to show only custom ranges
+    axisRenderer.labels.template.setAll({ forceHidden: true });
 
     // Custom range labels using axis ranges (replaces defaults like 0, 50, 100)
     if (ranges.length > 0) {
@@ -57,7 +53,7 @@ export default function GaugeChart({ value = 50, bandsData, ranges = [] }) {
           text: val.toString(),
           inside: false,  // Place outside the arc
           radius: 5,     // Adjust offset from axis
-          fontSize: "0.6em",
+          fontSize: "0.9em",
           fill: am5.color(0x000000),  // Black text
           fontWeight: "500",
         });
@@ -67,13 +63,13 @@ export default function GaugeChart({ value = 50, bandsData, ranges = [] }) {
       });
     }
 
-    // Clock hand
+    // Clock Hand with bigger base
     let axisDataItem = xAxis.makeDataItem({});
-    let clockHand = am5radar.ClockHand.new(root, { 
+    let clockHand = am5radar.ClockHand.new(root, {
       radius: am5.percent(95),
       bottomWidth: 10,          // base thickness
-      topWidth: 1,              // sharp tip
-      pinRadius: 14,            // circular pin at base
+      topWidth: 2,              // sharp tip
+      pinRadius: 15,            // circular pin at base
       fill: am5.color(0xffffff),   // needle color
       stroke: am5.color(0x000000), // outline
     });
@@ -86,7 +82,7 @@ export default function GaugeChart({ value = 50, bandsData, ranges = [] }) {
 
     let bullet = axisDataItem.set(
       "bullet",
-      am5xy.AxisBullet.new(root, { sprite: clockHand }) 
+      am5xy.AxisBullet.new(root, { sprite: clockHand })
     );
     xAxis.createAxisRange(axisDataItem);
     axisDataItem.set("value", value);
@@ -103,22 +99,8 @@ export default function GaugeChart({ value = 50, bandsData, ranges = [] }) {
       })
     );
 
-    // Bands data
-    const defaultBandsData = [
-      { title: "Unsustainable", color: "#ee1f25", lowScore: -40, highScore: -20 },
-      { title: "Volatile", color: "#f04922", lowScore: -20, highScore: 0 },
-      { title: "Foundational", color: "#fdae19", lowScore: 0, highScore: 20 },
-      { title: "Developing", color: "#f3eb0c", lowScore: 20, highScore: 40 },
-      { title: "Maturing", color: "#b0d136", lowScore: 40, highScore: 60 },
-      { title: "Sustainable", color: "#54b947", lowScore: 60, highScore: 80 },
-      { title: "High Performing", color: "#0f9747", lowScore: 80, highScore: 100 },
-    ];
-
-    // Use props if provided, otherwise default
-    const bandsToUse = bandsData || defaultBandsData;
-
-    // Create bands
-    bandsToUse.forEach((data) => {
+    // Bands
+    bandsData.forEach((data) => {
       let axisRange = xAxis.createAxisRange(xAxis.makeDataItem({}));
       axisRange.setAll({
         value: data.lowScore,
@@ -127,16 +109,16 @@ export default function GaugeChart({ value = 50, bandsData, ranges = [] }) {
       axisRange.get("axisFill").setAll({
         visible: true,
         fill: am5.color(data.color),
-        fillOpacity: 0.8,
+        fillOpacity: 0.9,
       });
       let bandLabel = axisRange.get("label");
       bandLabel.setAll({
         text: data.title,
         inside: true,
         radius: 15,
-        fontSize: "0.6em",
-        fill: am5.color("#ffffff"),
-        fontWeight: "500",
+        fontSize: "0.9em",
+        fontStyle: "bold",
+        fill: am5.color(0x000000),
       });
       bandLabel.set("forceHidden", false);
       bandLabel.set("visible", true);
@@ -144,15 +126,10 @@ export default function GaugeChart({ value = 50, bandsData, ranges = [] }) {
 
     chart.appear(1000, 100);
 
-    return () => {
-      root.dispose();
-    };
+    return () => root.dispose();
   }, [value, bandsData, ranges]);
 
   return (
-    <div 
-      ref={chartRef} 
-      className="w-[466px] ml-[-33px] h-[300px] md:h-[400px]" 
-    />
+    <div ref={chartRef} className="w-[385px] h-[200px] md:h-[400px]" />
   );
 }

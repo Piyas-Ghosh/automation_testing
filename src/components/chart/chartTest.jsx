@@ -76,7 +76,6 @@ export default function GaugeChartStep({ value = 50, bandsData, ranges = [] }) {
 
     // Optional: style pin separately
     clockHand.pin.setAll({
-      // fill: am5.color(0xffffff),
       stroke: am5.color(0x000000),
       strokeWidth: 2,
     });

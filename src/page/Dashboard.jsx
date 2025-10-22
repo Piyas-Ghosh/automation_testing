@@ -6,8 +6,17 @@ import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const navigate = useNavigate();
+
+  // Define bandsData and ranges
+  const bandsData = [
+    { title: "Poor", color: "#FF0000", lowScore: 0, highScore: 30 },
+    { title: "Moderate", color: "#FFFF00", lowScore: 31, highScore: 60 },
+    { title: "Good", color: "#00FF00", lowScore: 61, highScore: 100 },
+  ];
+  const ranges = [bandsData[0].lowScore, ...bandsData.map(band => band.highScore)];
+
   return (
-    <div className=" text-black min-h-screen">
+    <div className="text-black min-h-screen">
       <div className="w-full px-4 md:px-12 py-12">
         {/* Hero */}
 
@@ -15,27 +24,28 @@ export default function Dashboard() {
         <div className="grid md:grid-cols-3 gap-8 mb-16">
           {/* Performance Over Time (Bigger Section) */}
           <div className="md:col-span-2 backdrop-blur-xl rounded-2xl p-6 border border-gray-300 shadow-xl">
-            <h3 className="text-2xl font-semibold  mb-4">
+            <h3 className="text-2xl font-semibold mb-4">
               Performance Over Time
             </h3>
             <LineChart />
           </div>
 
           {/* Application Health (Smaller Section) */}
-          <div className="backdrop-blur-lg rounded-2xl p-6 border border-gray-300 shadow-lg flex flex-col">
-            <h3 className="text-2xl font-semibold  mb-4">
+          <div className="backdrop-blur-lg rounded-2xl p-6 border border-gray-300 shadow-lg flex flex-col items-start justify-center text-center">
+            <h3 className="text-2xl font-semibold mb-25">
               Application Health
             </h3>
-            <GaugeChart />
+            <div className="w-full flex justify-center">
+              <GaugeChart value={75} bandsData={bandsData} ranges={ranges} />
+            </div>
           </div>
 
-          <div className=" md:col-span-3  backdrop-blur-lg rounded-2xl p-6 border border-gray-300 shadow-lg flex flex-col">
-            <h3 className="text-2xl font-semibold  mb-4">
+          <div className="md:col-span-3 backdrop-blur-lg rounded-2xl p-6 border border-gray-300 shadow-lg flex flex-col">
+            <h3 className="text-2xl font-semibold mb-4">
               Application Health
             </h3>
             <ForceDirectedChart />
           </div>
-
         </div>
 
         {/* Stats */}
@@ -62,7 +72,7 @@ export default function Dashboard() {
 
         {/* Test Flow */}
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold  mb-4">Test Flow Visualization</h2>
+          <h2 className="text-3xl font-bold mb-4">Test Flow Visualization</h2>
           <button
             onClick={() => navigate('/flow')}
             className="bg-gradient-to-r from-blue-900 to-blue-500 hover:from-blue-500 hover:to-blue-800 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg"
@@ -74,4 +84,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
