@@ -15,9 +15,9 @@ export default function TestFlow() {
   const [stepData, setStepData] = useState([]);
 
   const bandsData = [
-    { title: "Poor", color: "#FF0000", lowScore: 0, highScore: 30 },
-    { title: "Moderate", color: "#FFFF00", lowScore: 31, highScore: 60 },
-    { title: "Good", color: "#00FF00", lowScore: 61, highScore: 100 },
+    { title: "Poor", color: "#d15c5a", lowScore: 0, highScore: 30 },
+    { title: "Moderate", color: "#c9b74f", lowScore: 31, highScore: 60 },
+    { title: "Good", color: "#51c251", lowScore: 61, highScore: 100 },
   ];
 
   const initializeStepData = () => [

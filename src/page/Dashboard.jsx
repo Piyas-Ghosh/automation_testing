@@ -9,9 +9,9 @@ export default function Dashboard() {
 
   // Define bandsData and ranges
   const bandsData = [
-    { title: "Poor", color: "#FF0000", lowScore: 0, highScore: 30 },
-    { title: "Moderate", color: "#FFFF00", lowScore: 31, highScore: 60 },
-    { title: "Good", color: "#00FF00", lowScore: 61, highScore: 100 },
+    { title: "Poor", color:"#d15c5a", lowScore: 0, highScore: 30 },
+    { title: "Moderate", color:"#c9b74f", lowScore: 31, highScore: 60 },
+    { title: "Good", color:"#51c251", lowScore: 61, highScore: 100 },
   ];
   const ranges = [bandsData[0].lowScore, ...bandsData.map(band => band.highScore)];
 
@@ -54,19 +54,19 @@ export default function Dashboard() {
             title="Total Tests"
             value="1,247"
             icon="📊"
-            gradient="from-blue-500 to-blue-600"
+            gradient="from-blue-300 to-blue-400"
           />
           <StatsCard
             title="Total Pass"
             value="1,089"
             icon="✅"
-            gradient="from-green-500 to-green-600"
+            gradient="from-green-300 to-green-500"
           />
           <StatsCard
             title="Total Fail"
             value="158"
             icon="❌"
-            gradient="from-red-500 to-red-500"
+            gradient="bg-[#d46757]"
           />
         </div>
 
@@ -75,7 +75,7 @@ export default function Dashboard() {
           <h2 className="text-3xl font-bold mb-4">Test Flow Visualization</h2>
           <button
             onClick={() => navigate('/flow')}
-            className="bg-gradient-to-r from-blue-900 to-blue-500 hover:from-blue-500 hover:to-blue-800 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg"
+            className="bg-gradient-to-r from-blue-900 to-blue-500 hover:from-blue-500 hover:to-blue-800 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg cursor-pointer"
           >
             View Test Flow
           </button>

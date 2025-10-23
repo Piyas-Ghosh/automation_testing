@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Home, User, Menu, X, CopyPlus } from "lucide-react";
+import { Home, User, Menu, X, CopyPlus, LayoutList } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 const Sidebar = () => {
@@ -9,20 +9,18 @@ const Sidebar = () => {
     const menuItems = [
         { name: "Dashboard", icon: <Home size={20} />, path: "/" },
         { name: "Add Test Case", icon: <CopyPlus size={20} />, path: "/crud" },
-        { name: "Logout", icon: <User size={20} />, path: " " },
+        { name: "Flow", icon: <LayoutList size={20} />, path: "/flow" },
+        { name: "Profile", icon: <User size={20} />, path: "/profile" },
     ];
 
     return (
         <aside
-            className={`${isOpen ? "w-45" : "w-16"
-                } bg-[#091746] text-white h-auto p-4 flex flex-col transition-all duration-300 sticky `}
+            className={`${isOpen ? "w-48" : "w-16"
+                } bg-[#bcd0e3] text-black h-screen p-4 flex flex-col transition-all duration-300 sticky top-0`}
         >
             {/* Header / Toggle */}
             <div className="flex items-center justify-between mb-6">
-                <h1
-                    className={`cursor-pointer text-xl font-bold transition-all duration-300 ${!isOpen && "hidden"
-                        }`}
-                >
+                <h1 className={`cursor-pointer text-xl font-bold transition-all duration-300 ${!isOpen && "hidden"}`}>
                     Logo
                 </h1>
                 <button onClick={() => setIsOpen(!isOpen)} className="cursor-pointer">
@@ -35,15 +33,27 @@ const Sidebar = () => {
                 {menuItems.map((item, index) => {
                     const isActive = location.pathname === item.path;
                     return (
-                        <Link
-                            key={index}
-                            to={item.path}
-                            className={`flex items-center gap-3 p-2 rounded-lg transition ${isActive ? "bg-[#1d2a6d]" : "hover:bg-[#1d2a6d]"
-                                }`}
-                        >
-                            {item.icon}
-                            {isOpen && <span>{item.name}</span>}
-                        </Link>
+                        <div key={index} className="relative group">
+                            <Link
+                                to={item.path}
+                                className={`flex items-center gap-3 p-2 rounded-lg transition ${isActive
+                                    ? "bg-[#0924aca7] text-white"
+                                    : "hover:bg-[#0924aca7] hover:text-white"
+                                    }`}
+                            >
+                                {item.icon}
+                                {isOpen && <span>{item.name}</span>}
+                            </Link>
+
+                            {/* Tooltip */}
+                            {!isOpen && (
+                                <span className="absolute left-full top-1/2 -translate-y-1/2 ml-2 
+                               bg-gray-800 text-white text-sm px-2 py-1 rounded-md opacity-0 
+                                  group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300 whitespace-nowrap z-50">
+                                    {item.name}
+                                </span>
+                            )}
+                        </div>
                     );
                 })}
             </nav>
@@ -51,13 +61,13 @@ const Sidebar = () => {
             {/* Footer */}
             <div className="mt-auto">
                 <p
-                    className={`text-sm text-gray-400 transition-all ${!isOpen && "hidden"
+                    className={`text-sm text-gray-900 transition-all ${!isOpen && "hidden"
                         }`}
                 >
-                    © 2025 vitwo
+                    © 2025 vitwo.ai
                 </p>
             </div>
-        </aside>
+        </aside >
     );
 };
 
