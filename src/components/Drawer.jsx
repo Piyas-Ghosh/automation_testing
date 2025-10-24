@@ -10,7 +10,7 @@ const Drawer = ({ isOpen, onClose, children }) => {
       ></div>
 
       <div
-        className={`fixed top-0 right-0 h-full w-[60%] bg-white shadow-xl transform transition-transform duration-300 ${isOpen
+        className={`fixed top-0 right-0 h-full w-[60%] bg-white  shadow-xl transform transition-transform duration-300 ${isOpen
           ? "translate-x-0 visible pointer-events-auto"
           : "translate-x-full invisible pointer-events-none"
           } z-[9999]`}
@@ -18,13 +18,14 @@ const Drawer = ({ isOpen, onClose, children }) => {
         {/* Close button */}
         <button
           onClick={onClose}
-          className="p-2 m-2 text-gray-700 hover:text-black"
+          className="p-1 m-2 text-gray-700 hover:text-black cursor-pointer"
         >
           <X />
         </button>
+        
 
         {/* Drawer content */}
-        <div className="p-4">{children}</div>
+        <div className="p-1">{children}</div>
       </div>
     </>
   );

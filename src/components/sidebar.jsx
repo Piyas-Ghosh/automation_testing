@@ -8,15 +8,15 @@ const Sidebar = () => {
 
     const menuItems = [
         { name: "Dashboard", icon: <Home size={20} />, path: "/" },
-        { name: "Add Test Case", icon: <CopyPlus size={20} />, path: "/crud" },
-        { name: "Flow", icon: <LayoutList size={20} />, path: "/flow" },
+        { name: "Add New TestCase", icon: <CopyPlus size={20} />, path: "/add_new_testcase" },
+        { name: "Test Flow", icon: <LayoutList size={20} />, path: "/testflow" },
         { name: "Profile", icon: <User size={20} />, path: "/profile" },
     ];
 
     return (
         <aside
-            className={`${isOpen ? "w-48" : "w-16"
-                } bg-[#bcd0e3] text-black h-screen p-4 flex flex-col transition-all duration-300 sticky top-0`}
+            className={`${isOpen ? "w-55" : "w-16"} 
+            bg-[#bcd0e3] text-black h-screen p-4 flex flex-col transition-all duration-300 sticky top-0 relative z-[999] overflow-visible`}
         >
             {/* Header / Toggle */}
             <div className="flex items-center justify-between mb-6">
@@ -47,12 +47,16 @@ const Sidebar = () => {
 
                             {/* Tooltip */}
                             {!isOpen && (
-                                <span className="absolute left-full top-1/2 -translate-y-1/2 ml-2 
-                               bg-gray-800 text-white text-sm px-2 py-1 rounded-md opacity-0 
-                                  group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300 whitespace-nowrap z-50">
+                                <span
+                                    className="absolute left-full top-1/2 -translate-y-1/2 ml-2 
+                                     bg-gray-800 text-white text-sm px-2 py-1 rounded-md opacity-0 
+                                      group-hover:opacity-100 group-hover:translate-x-1 
+                                      transition-all duration-300 whitespace-nowrap z-[9999]"
+                                >
                                     {item.name}
                                 </span>
                             )}
+
                         </div>
                     );
                 })}
@@ -60,12 +64,7 @@ const Sidebar = () => {
 
             {/* Footer */}
             <div className="mt-auto">
-                <p
-                    className={`text-sm text-gray-900 transition-all ${!isOpen && "hidden"
-                        }`}
-                >
-                    © 2025 vitwo.ai
-                </p>
+
             </div>
         </aside >
     );

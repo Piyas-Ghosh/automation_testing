@@ -27,7 +27,7 @@ export default function GaugeChartStep({ value = 50, bandsData, ranges = [] }) {
     let xAxis = chart.xAxes.push(
       am5xy.ValueAxis.new(root, {
         min: 0,
-        max: 100,
+        max: 30,
         strictMinMax: true,
         renderer: axisRenderer,
         radius: am5.percent(100),

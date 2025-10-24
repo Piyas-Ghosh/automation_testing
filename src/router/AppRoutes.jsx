@@ -3,7 +3,6 @@ import Layout from "../layout/Layout";
 import Dashboard from "../page/Dashboard";
 import FlowPage from "../page/Flowpage";
 import Auth from "../api/Auth";
-import DemoForm from "../page/Demofrom";
 import Crud from "../page/Crud";
 
 const AppRoutes = () => {
@@ -19,7 +18,7 @@ const AppRoutes = () => {
                 }
             />
             <Route
-                path="/flow"
+                path="/testflow"
                 element={
                     <Layout>
                         <FlowPage />
@@ -27,15 +26,7 @@ const AppRoutes = () => {
                 }
             />
             <Route
-                path="/demoform"
-                element={
-                    <Layout>
-                        <DemoForm />
-                    </Layout>
-                }
-            />
-            <Route
-                path="/crud"
+                path="/add_new_testcase"
                 element={
                     <Layout>
                         <Crud />
